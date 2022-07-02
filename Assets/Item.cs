@@ -18,8 +18,8 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private Vector2 _lastMousePosition;
     private void Awake()
     {
-        _icon.transform.GetComponent<RectTransform>().sizeDelta = _slotSize * Inventory.CellSize;
-        _backGround.transform.GetComponent<RectTransform>().sizeDelta = _slotSize * Inventory.CellSize;
+        //_icon.transform.GetComponent<RectTransform>().sizeDelta = _slotSize * Inventory.CellSize;
+        //_backGround.transform.GetComponent<RectTransform>().sizeDelta = _slotSize * Inventory.CellSize;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -29,14 +29,22 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnDrag(PointerEventData data)
     {
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        Vector2 delta =data.position - _lastMousePosition;
-        rectTransform.position = rectTransform.position + new Vector3(delta.x, delta.y, rectTransform.position.z);
+        //RectTransform rectTransform = GetComponent<RectTransform>();
+        Vector2 delta = data.position - _lastMousePosition;
+        Vector2 tempPos = _icon.GetComponent<RectTransform>().position + new Vector3(delta.x, delta.y, _icon.GetComponent<RectTransform>().position.z);
+        _icon.GetComponent<RectTransform>().position = tempPos;
         _lastMousePosition = data.position;
+
+        tempPos.x = Mathf.Round(tempPos.x / 64.0f) * 64.0f;
+        tempPos.y = Mathf.Round(tempPos.y / 64.0f) * 64.0f;
+        //rectTransform.anchoredPosition = tempPos * 64.0f;
+        Debug.Log(tempPos);
+        _backGround.GetComponent<RectTransform>().position = tempPos;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-       
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        //Debug.Log(rectTransform.position);
     }
 }
